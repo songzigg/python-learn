@@ -88,6 +88,7 @@ class NeteaseClickPlaylist():
             response = self.session.post(url, headers=self.headers, data=self.cracker.get(data))
             # 打印播放结果
             self.logging(f"{song_infos[songid]}")
+        return song_infos
     '''获得某歌单的所有歌曲信息'''
     def getPlayListSongs(self, playlist_id, num_songs):
         detail_url = 'https://music.163.com/weapi/v6/playlist/detail?csrf_token='
