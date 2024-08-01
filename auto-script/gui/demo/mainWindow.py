@@ -12,6 +12,9 @@ from wyy_click_play import NeteaseClickPlaylist
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
+
+        # 设置窗口名称
+        self.setWindowTitle("music163客户端小工具")
         # 所有播放歌单
         self.allPlaylists = None
         self.ui = Ui_MainWindow()
@@ -47,6 +50,8 @@ class MainWindow(QMainWindow):
         # 获取当前选中的歌单ID
         playlist_id = selected_text.split('(')[1].split(')')[0]
         song_infos = self.music163.getPlayListSongs(playlist_id, self.allPlaylists[playlist_id][1])
+       #  清空 comboBox_2
+        self.ui.comboBox_2.clear()
        # 打印歌单歌曲信息
         for song_id in song_infos.keys():
             song_info = song_infos[song_id]
@@ -75,6 +80,8 @@ class MainWindow(QMainWindow):
         # 获取 QListWidget 实例
         self.tableWidget = self.ui.tableWidget
 
+        # 首先清除tableWidget中的所有内容
+        self.tableWidget.clearContents()
         # 设置列数和列标题
         self.tableWidget.setColumnCount(5)
         self.tableWidget.setHorizontalHeaderLabels(['歌单ID', '歌单名', '歌曲数量', '播放次数', '歌单属性'])
@@ -101,11 +108,15 @@ class MainWindow(QMainWindow):
         for idx in range(num_times):
             self.logging('正在循环播放第%d/%d次' % (idx + 1, num_times))
 
-            # song_infos = self.music163.clickplaylist(playlist_id, self.allPlaylists)
+            song_infos = self.music163.getPlayListSongs(playlist_id, self.allPlaylists[playlist_id][1])
             # 更新 QLabel 文本
             self.ui.listWidget.addItem('正在循环播放第%d/%d次' % (idx + 1, num_times))
-            # self.ui.listWidget.addItem(f"{song_infos[songid]}")
-            # self.logging(f"{song_infos[songid]}")
+            # 遍历歌曲信息，模拟播放行为
+            for songid in list(song_infos.keys()):
+                self.logging(f"{song_infos[songid]}")
+                self.music163.clicksong(songid)
+                self.ui.listWidget.addItem(f"{song_infos[songid]}")
+            self.ui.listWidget.addItem('循环播放第%d/%d次完成' % (idx + 1, num_times))
 
     def handle_button_4_click(self):
         # push_button_4 歌曲循环触发

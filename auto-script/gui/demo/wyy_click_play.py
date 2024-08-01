@@ -89,6 +89,27 @@ class NeteaseClickPlaylist():
             # 打印播放结果
             self.logging(f"{song_infos[songid]}")
         return song_infos
+
+    '''刷某个歌曲的播放量'''
+    def clicksong(self, songid):
+        url = 'http://music.163.com/weapi/feedback/weblog'
+        data = {
+            'logs': json.dumps([{
+                'action': 'play',
+                'json': {
+                    'download': 0,
+                    'end': 'playend',
+                    'id': songid,
+                    'sourceId': '',
+                    'time': '240',
+                    'type': 'song',
+                    'wifi': '0'
+                }
+            }])
+        }
+        response = self.session.post(url, headers=self.headers, data=self.cracker.get(data))
+        return response.json()
+
     '''获得某歌单的所有歌曲信息'''
     def getPlayListSongs(self, playlist_id, num_songs):
         detail_url = 'https://music.163.com/weapi/v6/playlist/detail?csrf_token='
