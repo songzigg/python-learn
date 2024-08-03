@@ -19,8 +19,7 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
 from PySide6.QtWidgets import (QApplication, QComboBox, QHBoxLayout, QHeaderView,
     QLabel, QLineEdit, QListWidget, QListWidgetItem,
     QMainWindow, QPushButton, QSizePolicy, QSpinBox,
-    QStatusBar, QTableWidget, QTableWidgetItem, QToolBar,
-    QWidget)
+    QStatusBar, QTableWidget, QTableWidgetItem, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -121,11 +120,6 @@ class Ui_MainWindow(object):
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
         MainWindow.setStatusBar(self.statusbar)
-        self.toolBar = QToolBar(MainWindow)
-        self.toolBar.setObjectName(u"toolBar")
-        MainWindow.addToolBar(Qt.ToolBarArea.TopToolBarArea, self.toolBar)
-
-        self.toolBar.addSeparator()
 
         self.retranslateUi(MainWindow)
 
@@ -133,7 +127,7 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"music163客户端小工具", None))
         self.action_1.setText(QCoreApplication.translate("MainWindow", u"\u52a8\u4f5c1", None))
 #if QT_CONFIG(tooltip)
         self.action_1.setToolTip(QCoreApplication.translate("MainWindow", u"\u52a8\u4f5c\u63d0\u793a", None))
@@ -152,6 +146,5 @@ class Ui_MainWindow(object):
         self.pushButton_1.setText(QCoreApplication.translate("MainWindow", u"\u5bc6\u7801\u767b\u9646", None))
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"\u6b4c\u5355\u660e\u7ec6", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"\u63a7\u5236\u53f0", None))
-        self.toolBar.setWindowTitle(QCoreApplication.translate("MainWindow", u"toolBar", None))
     # retranslateUi
 
