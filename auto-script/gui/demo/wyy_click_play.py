@@ -46,7 +46,7 @@ class NeteaseClickPlaylist():
         tb = prettytable.PrettyTable()
         tb.field_names = ['歌单ID', '歌单名', '歌曲数量', '播放次数', '歌单属性']
         for key, value in all_playlists.items():
-            tb.add_row([key]+value)
+            tb.add_row([key] + value)
         self.logging('您创建/收藏的所有歌单如下:')
         print(tb)
         # 根据用户输入获取指定歌单的详情信息
@@ -62,8 +62,9 @@ class NeteaseClickPlaylist():
                 self.logging('循环播放次数必须为整数', 'Error')
                 continue
             for idx in range(num_times):
-                self.logging('正在循环播放第%d/%d次' % (idx+1, num_times))
+                self.logging('正在循环播放第%d/%d次' % (idx + 1, num_times))
                 self.clickplaylist(playlist_id, all_playlists)
+
     '''刷某个歌单的播放量'''
     def clickplaylist(self, playlist_id, all_playlists):
         url = 'http://music.163.com/weapi/feedback/weblog'
@@ -125,22 +126,24 @@ class NeteaseClickPlaylist():
                 'n': 1000,
                 'csrf_token': self.csrf
             }
-            response = self.session.post(detail_url+self.csrf, headers=self.headers, data=self.cracker.get(data))
+            response = self.session.post(detail_url + self.csrf, headers=self.headers, data=self.cracker.get(data))
             #     •	从响应中提取歌曲信息。
             tracks = response.json()['playlist']['tracks']
             #    •	遍历歌曲信息，提取歌曲名、歌手、音质等信息。
             for track in tracks:
                 name = track.get('name')
                 songid = track.get('id')
+                alia = track.get('alia')
                 artists = ','.join([i.get('name') for i in track.get('ar')])
                 brs = [track.get('h')] + [track.get('m')] + [track.get('l')]
                 #   •	将歌曲信息存入 song_infos 字典。
-                song_infos[songid] = [name, artists, brs]
+                song_infos[songid] = [songid, name, artists, alia, brs]
             offset += 1
             #   •	当歌曲信息数量达到 num_songs 时，跳出循环。
             if len(list(song_infos.keys())) >= num_songs:
                 break
         return song_infos
+
     '''获得所有歌单'''
     def getPlayLists(self):
         playlist_url = 'https://music.163.com/weapi/user/playlist?csrf_token='
@@ -153,7 +156,7 @@ class NeteaseClickPlaylist():
                 "limit": 50,
                 "csrf_token": self.csrf
             }
-            response = self.session.post(playlist_url+self.csrf, headers=self.headers, data=self.cracker.get(data))
+            response = self.session.post(playlist_url + self.csrf, headers=self.headers, data=self.cracker.get(data))
             playlists += response.json()['playlist']
             offset += 1
             if response.json()['more'] == False:
@@ -171,6 +174,7 @@ class NeteaseClickPlaylist():
                 attr = '我收藏的歌单'
             all_playlists[str(play_id)] = [name, track_count, play_count, attr]
         return all_playlists
+
     '''模拟登录'''
     def login(self):
         client = login.Client()

@@ -17,6 +17,8 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("music163客户端小工具")
         # 所有播放歌单
         self.allPlaylists = None
+        # 当前歌单的歌曲
+        self.currentPlaylistSongs = None
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         # Set up a timer to simulate real-time data updates
@@ -50,13 +52,16 @@ class MainWindow(QMainWindow):
         # 获取当前选中的歌单ID
         playlist_id = selected_text.split('(')[1].split(')')[0]
         song_infos = self.music163.getPlayListSongs(playlist_id, self.allPlaylists[playlist_id][1])
+        self.currentPlaylistSongs = song_infos
        #  清空 comboBox_2
         self.ui.comboBox_2.clear()
        # 打印歌单歌曲信息
         for song_id in song_infos.keys():
             song_info = song_infos[song_id]
-            self.ui.listWidget.addItem(f"歌曲： {song_info[0]} - {song_info[1]}")
-            self.ui.comboBox_2.addItem(song_info[0] + " - " + song_info[1])
+            self.ui.listWidget.addItem(f"歌曲： {song_info[0]} - {song_info[1]} - {song_info[2]}")
+            #  打印完整歌曲信息
+            self.ui.listWidget.addItem(f"歌曲详情： {song_info}")
+            self.ui.comboBox_2.addItem(str(song_info[0]) + "-" + song_info[1])
 
 
     # 选择歌曲加载歌曲信息
@@ -96,30 +101,55 @@ class MainWindow(QMainWindow):
             self.tableWidget.setItem(row, 3, QTableWidgetItem(str(playlist_info[2])))
             self.tableWidget.setItem(row, 4, QTableWidgetItem(playlist_info[3]))
 
+    # 歌单循环
     def handle_button_3_click(self):
         # 获取当前选中的文本
         selected_text = self.ui.comboBox_1.currentText()
-        # 获取当前时间
-        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
         # 获取当前选中的歌单ID
         playlist_id = selected_text.split('(')[1].split(')')[0]
         num_times = self.ui.spinBox_1.value()
         # push_button_3 歌单循环触发
         for idx in range(num_times):
-            self.logging('正在循环播放第%d/%d次' % (idx + 1, num_times))
+            # 获取当前时间
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            self.logging(f'{current_time}:正在循环播放歌单，第%d/%d次' % (idx + 1, num_times))
 
             song_infos = self.music163.getPlayListSongs(playlist_id, self.allPlaylists[playlist_id][1])
+            self.currentPlaylistSongs = song_infos
             # 更新 QLabel 文本
-            self.ui.listWidget.addItem('正在循环播放第%d/%d次' % (idx + 1, num_times))
+            self.ui.listWidget.addItem(f'{current_time}:正在循环播放歌单，第%d/%d次' % (idx + 1, num_times))
             # 遍历歌曲信息，模拟播放行为
             for songid in list(song_infos.keys()):
                 self.logging(f"{song_infos[songid]}")
                 self.music163.clicksong(songid)
-                self.ui.listWidget.addItem(f"{song_infos[songid]}")
-            self.ui.listWidget.addItem('循环播放第%d/%d次完成' % (idx + 1, num_times))
+                self.ui.listWidget.addItem(f"正在循环播放歌曲{song_infos[songid]}")
 
+            end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            self.ui.listWidget.addItem(f'{end_time}:循环播放歌单，第%d/%d次完成' % (idx + 1, num_times))
+
+    # 歌曲循环
     def handle_button_4_click(self):
+        # 获取当前选中的文本
+        selected_text = self.ui.comboBox_2.currentText()
+        # 获取当前时间
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        # 更新 QLabel 文本
+        self.ui.listWidget.addItem(f"{current_time}您选择了: {selected_text}")
+
+        # 获取当前选中的歌曲ID
+        song_id = selected_text.split('-')[0]
+        num_times = self.ui.spinBox_2.value()
         # push_button_4 歌曲循环触发
+        for idx in range(num_times):
+            # 获取当前时间
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            self.logging(f'{current_time}:正在循环播放歌曲，第%d/%d次' % (idx + 1, num_times))
+            self.music163.clicksong(song_id)
+            # self.ui.listWidget.addItem(f"正在循环播放歌曲:{self.currentPlaylistSongs[int(song_id)][1]}")
+            self.ui.listWidget.addItem(f"正在循环播放歌曲:{selected_text}")
+            end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            self.ui.listWidget.addItem(f'{end_time}:循环播放歌曲，第%d/%d次完成' % (idx + 1, num_times))
         return
     def update_data(self):
         # Simulate real-time data update
