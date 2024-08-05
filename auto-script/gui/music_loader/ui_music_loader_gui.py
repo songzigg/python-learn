@@ -24,15 +24,15 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(822, 600)
+        MainWindow.resize(803, 600)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.widget = QWidget(self.centralwidget)
         self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(50, 30, 721, 441))
-        self.verticalLayout_2 = QVBoxLayout(self.widget)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.widget.setGeometry(QRect(50, 31, 691, 335))
+        self.verticalLayout_3 = QVBoxLayout(self.widget)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout = QHBoxLayout()
@@ -112,18 +112,38 @@ class Ui_MainWindow(object):
         self.verticalLayout.addLayout(self.horizontalLayout_3)
 
 
-        self.verticalLayout_2.addLayout(self.verticalLayout)
+        self.verticalLayout_3.addLayout(self.verticalLayout)
+
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.verticalLayout_2 = QVBoxLayout()
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.label_4 = QLabel(self.widget)
+        self.label_4.setObjectName(u"label_4")
+
+        self.verticalLayout_2.addWidget(self.label_4)
+
+
+        self.horizontalLayout_4.addLayout(self.verticalLayout_2)
+
+        self.lineEdit_2 = QLineEdit(self.widget)
+        self.lineEdit_2.setObjectName(u"lineEdit_2")
+
+        self.horizontalLayout_4.addWidget(self.lineEdit_2)
+
+
+        self.verticalLayout_3.addLayout(self.horizontalLayout_4)
 
         self.tableWidget = QTableWidget(self.widget)
         self.tableWidget.setObjectName(u"tableWidget")
         self.tableWidget.setSortingEnabled(True)
 
-        self.verticalLayout_2.addWidget(self.tableWidget)
+        self.verticalLayout_3.addWidget(self.tableWidget)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 822, 24))
+        self.menubar.setGeometry(QRect(0, 0, 803, 24))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -135,7 +155,7 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"音乐下载客户端-松吉格", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"\u641c\u7d22\u6e90\uff1a", None))
         self.checkBox_wyy.setText(QCoreApplication.translate("MainWindow", u"\u7f51\u6613\u4e91\u97f3\u4e50", None))
         self.checkBox_kg.setText(QCoreApplication.translate("MainWindow", u"\u9177\u72d7\u97f3\u4e50", None))
@@ -147,5 +167,6 @@ class Ui_MainWindow(object):
         self.lineEdit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u8001\u8fa3\u6912\u7684techHub", None))
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"\u641c\u7d22", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"\u6b4c\u66f2\u4e0b\u8f7d\u8fdb\u5ea6\uff1a", None))
+        self.label_4.setText(QCoreApplication.translate("MainWindow", u"\u4e0b\u8f7d\u76ee\u5f55\uff1a", None))
     # retranslateUi
 
