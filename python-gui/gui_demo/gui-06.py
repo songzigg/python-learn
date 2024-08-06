@@ -27,7 +27,7 @@ class MainWindow(QMainWindow):
         toolbar.setIconSize(QSize(16, 16))
         self.addToolBar(toolbar)
 
-        button_action = QAction(QIcon("../icon/android.png"), "&Your button", self)
+        button_action = QAction(QIcon("../../auto-script/icon/android.png"), "&Your button", self)
         button_action.setStatusTip("This is your button")
         button_action.triggered.connect(self.onMyToolBarButtonClick)
         button_action.setCheckable(True)
@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
 
         # 解读一下下面这句话
 
-        button_action2 = QAction(QIcon("../icon/animal.png"), "Your &button2", self)
+        button_action2 = QAction(QIcon("../../auto-script/icon/animal.png"), "Your &button2", self)
         button_action2.setStatusTip("This is your button2")
         button_action2.triggered.connect(self.onMyToolBarButtonClick)
         button_action2.setCheckable(True)
