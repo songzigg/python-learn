@@ -3,7 +3,7 @@ from datetime import datetime
 import time
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QListWidget, QListWidgetItem, \
-    QTableWidgetItem
+    QTableWidgetItem, QAbstractItemView
 from PySide6.QtCore import QTimer
 from ui_MainWindow import Ui_MainWindow
 from wyy_click_play import NeteaseClickPlaylist
@@ -26,6 +26,8 @@ class MainWindow(QMainWindow):
         self.timer.timeout.connect(self.update_data)
         self.timer.start(1000)  # Update every second
         self.music163 = NeteaseClickPlaylist()
+        # 设置表格不可编辑
+        self.ui.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         # 用户名和密码登陆
         self.ui.pushButton_1.clicked.connect(self.handle_button_1_click)
         # 扫码登陆
