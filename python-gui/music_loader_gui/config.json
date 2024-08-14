@@ -1,0 +1,6 @@
+{
+    "logfilepath": "musicdl.log",
+    "proxies": {},
+    "music_quality": "0",
+    "search_size_per_source": 5
+}
