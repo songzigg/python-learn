@@ -13,6 +13,7 @@ from ..utils import seconds2hms, filterBadCharacter
 import hashlib
 import random
 import string
+from .kugou2 import kugou_api
 
 
 '''酷狗音乐下载类'''
@@ -20,12 +21,15 @@ class Kugou(Base):
     def __init__(self, config, logger_handle, **kwargs):
         super(Kugou, self).__init__(config, logger_handle, **kwargs)
         self.source = 'kugou'
+        self.kugou_api = kugou_api()
         self.__initialize()
         # self.ran = self.md5_decode(self.get_string_random(4))
     '''歌曲搜索'''
     def search(self, keyword, disable_print=True):
         if not disable_print: self.logger_handle.info('正在%s中搜索 >>>> %s' % (self.source, keyword))
         cfg = self.config.copy()
+
+        response = self.kugou_api.search_url(keyword)
         params = {
             'keyword': keyword,
             'page': str(cfg.get('page', 1)),
@@ -39,13 +43,14 @@ class Kugou(Base):
             'privilege_filter': '0',
             '_': str(int(time.time() * 1000))
         }
-        response = self.session.get(self.search_url, headers=self.search_headers, params=params)
-        all_items = response.json()['data']['lists']
+        # response = self.session.get(self.search_url, headers=self.search_headers, params=params)
+        # all_items = response.json()['data']['lists']
+        all_items = response['data']['lists']
         songinfos = []
         for item in all_items:
 
             # audio_id = item['Audioid']
-            audio_id = item['MixSongID']
+            audio_id = item['EMixSongID']
             timestamp = int(time.time() * 1000)
             # params = {
             #     'r': 'play/getdata',
@@ -92,9 +97,10 @@ class Kugou(Base):
                 'signature': sign,
             }
 
-            response = self.session.get(self.hash_url, headers=self.hash_headers, params=datas)
-            response_json = response.json()
-            if response_json.get('err_code') != 0: continue
+            response_json = self.kugou_api.fetch_url(audio_id)
+            # response = self.session.get(self.hash_url, headers=self.hash_headers, params=datas)
+            # response_json = response.json()
+            # if response_json.get('err_code') != 0: continue
             download_url = response_json['data']['play_url'].replace('\\', '')
             if not download_url: continue
             params = {
