@@ -14,6 +14,7 @@ from ui_music_loader_gui import Ui_MainWindow
 from musicdl import musicdl
 from modules.utils import Downloader, touchdir
 from PySide6.QtGui import QIcon, Qt, QCursor
+from TextDisplayDilog import TextDisplayDialog
 
 
 class MainWindow(QMainWindow):
@@ -54,6 +55,7 @@ class MainWindow(QMainWindow):
         # 鼠标右键点击的菜单
         self.context_menu = QMenu(self)
         self.action_download = self.context_menu.addAction('下载')
+        self.lyric_show = self.context_menu.addAction('歌词')
         # 进度条
         self.bar_download = QProgressBar(self)
         self.label_download = QLabel('歌曲下载进度:')
@@ -67,6 +69,7 @@ class MainWindow(QMainWindow):
         self.ui.tableWidget.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.ui.tableWidget.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.action_download.triggered.connect(self.download)
+        self.lyric_show.triggered.connect(self.showLyric)
 
     # 初始化 搜索结果 和 音乐记录 和选择的音乐索引
     def initialize(self):
@@ -145,11 +148,23 @@ class MainWindow(QMainWindow):
                                 fp.write(chunk)
                                 download_size += len(chunk)
                                 self.bar_download.setValue(int(download_size / total_size * 100))
+                   # 下载歌词到文本中 歌词在songs[lyric] 中
+                   #  with open(os.path.join(songinfo['savedir'], songinfo['savename'] + '_lyric.txt'), 'w') as f:
+                   #      f.write(songinfo['lyric'])
+
             QMessageBox().information(self, '下载完成', '歌曲%s已经下载完成, 保存在当前路径的%s文件夹下' % (
             songinfo['savename'], songinfo['savedir']))
             self.bar_download.setValue(0)
         except PermissionError:
              print(f"Error: No permission to write in the directory {songinfo['savedir']}")
+
+    @Slot()
+    def showLyric(self):
+        self.selected_music_idx = str(self.ui.tableWidget.selectedItems()[0].row())
+        songinfo = self.music_records.get(self.selected_music_idx)
+        # 创建并显示对话框
+        dialog = TextDisplayDialog(songinfo['lyric'])
+        dialog.exec()
 
     @Slot()
     def on_open_folder(self):
