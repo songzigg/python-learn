@@ -42,6 +42,7 @@ class MainWindow(QMainWindow):
                 QStandardPaths.writableLocation(QStandardPaths.DownloadLocation)
             )
         )
+        self.dest_dir = QDir(QStandardPaths.writableLocation(QStandardPaths.DownloadLocation)).path()
         self._open_folder_action.triggered.connect(self.on_open_folder)
         self.ui.tableWidget.setColumnCount(7)
         self.ui.tableWidget.setHorizontalHeaderLabels(['序号', '歌手', '歌名', '大小', '时长', '专辑', '来源'])
@@ -60,6 +61,11 @@ class MainWindow(QMainWindow):
         self.ui.pushButton.clicked.connect(self.search)
         self.ui.tableWidget.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
         self.ui.tableWidget.customContextMenuRequested.connect(self.mouseclick)
+        #  table 数据可滑动
+        self.ui.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        # 确保滚动条始终可见
+        self.ui.tableWidget.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.ui.tableWidget.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.action_download.triggered.connect(self.download)
 
     # 初始化 搜索结果 和 音乐记录 和选择的音乐索引
@@ -123,29 +129,41 @@ class MainWindow(QMainWindow):
         self.selected_music_idx = str(self.ui.tableWidget.selectedItems()[0].row())
         songinfo = self.music_records.get(self.selected_music_idx)
         headers = Downloader(songinfo).headers
-        touchdir(songinfo['savedir'])
-        with requests.get(songinfo['download_url'], headers=headers, stream=True, verify=False) as response:
-            if response.status_code == 200:
-                total_size, chunk_size, download_size = int(response.headers['content-length']), 1024, 0
-                with open(os.path.join(songinfo['savedir'], songinfo['savename']+'.'+songinfo['ext']), 'wb') as fp:
-                    for chunk in response.iter_content(chunk_size=chunk_size):
-                        if chunk:
-                            fp.write(chunk)
-                            download_size += len(chunk)
-                            self.bar_download.setValue(int(download_size / total_size * 100))
-        QMessageBox().information(self, '下载完成', '歌曲%s已经下载完成, 保存在当前路径的%s文件夹下' % (songinfo['savename'], songinfo['savedir']))
-        self.bar_download.setValue(0)
+        songinfo['savedir'] = self.dest_dir
+        # touchdir(songinfo['savedir'])
+        # 检查 'savedir' 是否存在，如果不存在则创建
+        if not os.path.exists(songinfo['savedir']):
+            os.makedirs(songinfo['savedir'])
+        try:
+            with requests.get(songinfo['download_url'], headers=headers, stream=True, verify=False) as response:
+                if response.status_code == 200:
+                    total_size, chunk_size, download_size = int(response.headers['content-length']), 1024, 0
+                    with open(os.path.join(songinfo['savedir'], songinfo['savename'] + '.' + songinfo['ext']),
+                              'wb') as fp:
+                        for chunk in response.iter_content(chunk_size=chunk_size):
+                            if chunk:
+                                fp.write(chunk)
+                                download_size += len(chunk)
+                                self.bar_download.setValue(int(download_size / total_size * 100))
+            QMessageBox().information(self, '下载完成', '歌曲%s已经下载完成, 保存在当前路径的%s文件夹下' % (
+            songinfo['savename'], songinfo['savedir']))
+            self.bar_download.setValue(0)
+        except PermissionError:
+             print(f"Error: No permission to write in the directory {songinfo['savedir']}")
 
     @Slot()
     def on_open_folder(self):
 
+        # 打开文件夹
         dir_path = QFileDialog.getExistingDirectory(
             self, "Open Directory", QDir.homePath(), QFileDialog.ShowDirsOnly
         )
 
+        # 如果用户选择了文件夹
         if dir_path:
             dest_dir = QDir(dir_path)
             self.ui.lineEdit_2.setText(QDir.fromNativeSeparators(dest_dir.path()))
+            self.dest_dir = dest_dir.path()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
