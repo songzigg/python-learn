@@ -112,7 +112,7 @@ class Netease(Base):
             lyric = response.json().get('lrc', {}).get('lyric', '')
             duration = int(item.get('duration', 0) / 1000)
             songinfo = {
-                'source': self.source,
+                'source': '网易云音乐',
                 'songid': str(item['id']),
                 'singers': filterBadCharacter(','.join([s.get('name', '') for s in item.get('artists')])),
                 'album': filterBadCharacter(item.get('album', {}).get('name', '-')),

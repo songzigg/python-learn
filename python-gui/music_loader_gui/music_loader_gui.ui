@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>875</width>
+    <width>928</width>
     <height>651</height>
    </rect>
   </property>
@@ -18,12 +18,12 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>31</y>
-      <width>771</width>
-      <height>491</height>
+      <y>30</y>
+      <width>801</width>
+      <height>541</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
+    <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
@@ -31,7 +31,7 @@
          <item>
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>搜索源：</string>
+            <string>搜索源一：</string>
            </property>
           </widget>
          </item>
@@ -49,16 +49,6 @@
           <widget class="QCheckBox" name="checkBox_kg">
            <property name="text">
             <string>酷狗音乐</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="checkBox_QQ">
-           <property name="text">
-            <string>QQ音乐</string>
            </property>
            <property name="checked">
             <bool>true</bool>
@@ -100,11 +90,81 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
+          <widget class="QLabel" name="label_1">
+           <property name="text">
+            <string>搜索源二：</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_QQ">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="text">
+            <string>QQ音乐</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_ximalaya">
+           <property name="text">
+            <string>喜玛拉雅</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_lizhi">
+           <property name="text">
+            <string>荔枝音乐</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_5s">
+           <property name="text">
+            <string>5Sing音乐</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBox_yiting">
+           <property name="text">
+            <string>一听音乐</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
           <widget class="QLabel" name="label_2">
            <property name="text">
             <string>搜索关键字：</string>
            </property>
           </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_3"/>
          </item>
          <item>
           <widget class="QLineEdit" name="lineEdit">
@@ -123,7 +183,7 @@
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
          <item>
           <widget class="QLabel" name="label_3">
            <property name="text">
@@ -140,12 +200,8 @@
          </item>
         </layout>
        </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
           <widget class="QLabel" name="label_4">
            <property name="text">
@@ -153,10 +209,10 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_2"/>
+         </item>
         </layout>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="lineEdit_2"/>
        </item>
       </layout>
      </item>

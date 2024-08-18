@@ -116,7 +116,7 @@ class Kugou(Base):
             ext = download_url.split('.')[-1]
             duration = int(item.get('Duration', 0))
             songinfo = {
-                'source': self.source,
+                'source': '酷狗音乐',
                 'songid': str(item['ID']),
                 'singers': filterBadCharacter(item.get('SingerName', '-')),
                 'album': filterBadCharacter(item.get('AlbumName', '-')),

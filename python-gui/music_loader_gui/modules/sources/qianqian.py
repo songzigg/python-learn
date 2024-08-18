@@ -56,7 +56,7 @@ class Qianqian(Base):
             ext = response_json['data']['format']
             duration = int(response_json['data']['duration'])
             songinfo = {
-                'source': self.source,
+                'source': '千千音乐',
                 'songid': str(item['id']),
                 'singers': filterBadCharacter(item['artist'][0].get('name', '-')),
                 'album': filterBadCharacter(item.get('albumTitle', '-')),

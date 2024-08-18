@@ -35,7 +35,7 @@ class Lizhi(Base):
             ext = download_url.split('.')[-1]
             duration = int(item.get('audio').get('duration', 0))
             songinfo = {
-                'source': self.source,
+                'source': '荔枝音乐',
                 'songid': str(item['audio']['id']),
                 'singers': filterBadCharacter(item['radio'].get('user_name', '-')),
                 'album': filterBadCharacter(item['radio'].get('name', '-')),

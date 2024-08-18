@@ -93,6 +93,10 @@ class MainWindow(QMainWindow):
             '千千音乐': 'qianqian',
             '酷狗音乐': 'kugou',
             '网易云音乐': 'netease',
+            '一听音乐': 'yiting',
+            '喜马拉雅': 'ximalaya',
+            '荔枝音乐': 'lizhi',
+            '5Sing音乐': 'fivesing'
         }
         selected_src_names = []
         if self.ui.checkBox_wyy.isChecked():
@@ -107,6 +111,14 @@ class MainWindow(QMainWindow):
             selected_src_names.append('咪咕音乐')
         if self.ui.checkBox_qq.isChecked():
             selected_src_names.append('千千音乐')
+        if self.ui.checkBox_yiting.isChecked():
+            selected_src_names.append('一听音乐')
+        if self.ui.checkBox_ximalaya.isChecked():
+            selected_src_names.append('喜马拉雅')
+        if self.ui.checkBox_lizhi.isChecked():
+            selected_src_names.append('荔枝音乐')
+        if self.ui.checkBox_5s.isChecked():
+            selected_src_names.append('5Sing音乐')
         target_srcs = [target_srcs_dict.get(name) for name in selected_src_names]
         keyword = self.ui.lineEdit.text()
         self.search_results = self.music_api.search(keyword, target_srcs)

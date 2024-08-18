@@ -100,7 +100,7 @@ class QQMusic(Base):
             filesize = str(round(filesize/1024/1024, 2)) + 'MB'
             duration = int(item.get('interval', 0))
             songinfo = {
-                'source': self.source,
+                'source': 'QQ音乐',
                 'songid': str(item['mid']),
                 'singers': filterBadCharacter(','.join([s.get('name', '') for s in item.get('singer', [])])),
                 'album': filterBadCharacter(item.get('album', {}).get('title', '')),

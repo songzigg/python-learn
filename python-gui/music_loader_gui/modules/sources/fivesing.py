@@ -63,7 +63,7 @@ class FiveSing(Base):
             lyric = response_json.get('data', {}).get('dynamicWords', '')
             duration = '-:-:-'
             songinfo = {
-                'source': self.source,
+                'source': '5Sing音乐',
                 'songid': str(item['songId']),
                 'singers': filterBadCharacter(item.get('singer', '-')),
                 'album': filterBadCharacter(response_json['data'].get('albumName', '-')),

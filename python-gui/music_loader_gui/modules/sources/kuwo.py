@@ -67,7 +67,7 @@ class Kuwo(Base):
             ext = download_url.split('.')[-1]
             duration = int(item.get('duration', 0))
             songinfo = {
-                'source': self.source,
+                'source': '酷我音乐',
                 'songid': str(item['DC_TARGETID']),
                 'singers': filterBadCharacter(item.get('ARTIST', '-')),
                 'album': filterBadCharacter(item.get('ALBUM', '-')),

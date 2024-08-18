@@ -59,7 +59,7 @@ class Migu(Base):
                 lyric = response.text
             duration = '-:-:-'
             songinfo = {
-                'source': self.source,
+                'source': '咪咕音乐',
                 'songid': str(item['id']),
                 'singers': filterBadCharacter(','.join([s.get('name', '') for s in item.get('singers', [])])),
                 'album': filterBadCharacter(item.get('albums', [{'name': '-'}])[0].get('name', '-')),

@@ -47,7 +47,7 @@ class YiTing(Base):
             ext = download_url.split('.')[-1]
             duration = '-:-:-'
             songinfo = {
-                'source': self.source,
+                'source': '一听音乐',
                 'songid': str(item['song_id']),
                 'singers': filterBadCharacter(item.get('singer_name', '-')),
                 'album': filterBadCharacter(item.get('album_name', '-')),

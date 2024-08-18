@@ -40,7 +40,7 @@ class Ximalaya(Base):
             download_url = response.json()['data'].get('src', '')
             if not download_url: continue
             songinfo = {
-                'source': self.source,
+                'source': '喜马拉雅',
                 'songid': str(item['id']),
                 'singers': filterBadCharacter(item.get('nickname', '-')),
                 'album': filterBadCharacter(item.get('albumTitle', '-')),
@@ -63,4 +63,4 @@ class Ximalaya(Base):
             'Referer': 'https://www.ximalaya.com/search/'
         }
         self.search_url = 'https://www.ximalaya.com/revision/search/main'
-        self.songinfo_url = 'https://www.ximalaya.com/revision/play/v1/audio?id={}&ptype=1'
+        self.songinfo_url = 'https://www.ximalaya.com/revision/play/v1/show?id={}&ptype=1'
