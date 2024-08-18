@@ -25,13 +25,14 @@ class MainWindow(QMainWindow):
         config = {'logfilepath': 'musicdl.log', 'savedir': 'downloaded', 'search_size_per_source': 2, 'proxies': {}}
         self.music_api = musicdl(config=config)
         # 设置窗口名称
-        self.setWindowTitle("music loader GUI -- mrSong")
+        self.setWindowTitle("mrsong分享 -- 音乐下载客户端")
         self.ui = Ui_MainWindow()
         # 实例化 Ui_MainWindow 并调用 setupUi 方法，将生成的 UI 组件加载到主窗口对象中。。
         # 生成的 UI 组件是一个 QWidget 对象，可以通过 self.ui.centralwidget 访问。
         self.ui.setupUi(self)
+        # 设置窗口图标
         self.setWindowIcon(QIcon(os.path.join(os.path.dirname(__file__), 'icon.ico')))
-        self.setFixedSize(900, 480)
+        self.setFixedSize(840, 480)
         self.initialize()
         # Open folder action
         self._open_folder_action = self.ui.lineEdit_2.addAction(

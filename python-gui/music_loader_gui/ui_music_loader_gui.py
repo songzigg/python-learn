@@ -24,12 +24,12 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(928, 651)
+        MainWindow.resize(822, 651)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.layoutWidget = QWidget(self.centralwidget)
         self.layoutWidget.setObjectName(u"layoutWidget")
-        self.layoutWidget.setGeometry(QRect(50, 30, 801, 541))
+        self.layoutWidget.setGeometry(QRect(50, 30, 721, 541))
         self.verticalLayout_2 = QVBoxLayout(self.layoutWidget)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -196,7 +196,7 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"music loader GUI -- mrsong", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"mrsong分享 -- 音乐下载客户端", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"\u641c\u7d22\u6e90\u4e00\uff1a", None))
         self.checkBox_wyy.setText(QCoreApplication.translate("MainWindow", u"\u7f51\u6613\u4e91\u97f3\u4e50", None))
         self.checkBox_kg.setText(QCoreApplication.translate("MainWindow", u"\u9177\u72d7\u97f3\u4e50", None))
