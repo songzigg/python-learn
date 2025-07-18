@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成都一日游旅行规划表</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .container {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 20px auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: visible;
+        }
+
+        /* 打印样式 */
+        @media print {
+            body {
+                background: white;
+                margin: 0;
+                padding: 0;
+            }
+            .container {
+                width: 210mm;
+                min-height: 297mm;
+                margin: 0;
+                box-shadow: none;
+                page-break-after: always;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-button {
+                display: none !important;
+            }
+        }
+
+        /* 剪裁线 */
+        .crop-marks {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+
+        .crop-marks::before,
+        .crop-marks::after {
+            content: '';
+            position: absolute;
+            border: 1px dashed #ccc;
+        }
+
+        .crop-marks::before {
+            top: 10mm;
+            left: 10mm;
+            right: 10mm;
+            bottom: 10mm;
+        }
+
+        /* 头部区域 */
+        .header {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: '🐼';
+            font-size: 3em;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            opacity: 0.3;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+
+        .weather-info {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+
+        /* 概览区域 */
+        .overview {
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .overview-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .overview-item i {
+            font-size: 1.5em;
+            color: #e74c3c;
+            margin-bottom: 8px;
+        }
+
+        .overview-item h3 {
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            color: #495057;
+        }
+
+        .overview-item p {
+            font-size: 0.8em;
+            color: #6c757d;
+        }
+
+        /* 主要内容区域 */
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            min-height: calc(297mm - 200px);
+        }
+
+        /* 时间表区域 */
+        .timeline {
+            padding: 20px;
+            border-right: 2px solid #e9ecef;
+            overflow-y: auto;
+        }
+
+        .timeline h2 {
+            color: #e74c3c;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 10px;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 20px;
+            position: relative;
+            page-break-inside: avoid;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 25px;
+            top: 40px;
+            bottom: -20px;
+            width: 2px;
+            background: #e74c3c;
+        }
+
+        .timeline-item:last-child::before {
+            display: none;
+        }
+
+        .timeline-time {
+            width: 60px;
+            text-align: center;
+            font-weight: 700;
+            color: #e74c3c;
+            font-size: 0.9em;
+        }
+
+        .timeline-icon {
+            width: 50px;
+            height: 50px;
+            background: #e74c3c;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2em;
+            margin: 0 15px;
+            z-index: 1;
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .timeline-content h3 {
+            color: #495057;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .timeline-details {
+            font-size: 0.85em;
+            color: #6c757d;
+        }
+
+        .timeline-details p {
+            margin-bottom: 5px;
+        }
+
+        .price-tag {
+            background: #28a745;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        /* 侧边栏 */
+        .sidebar {
+            padding: 20px;
+            background: #f8f9fa;
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            margin-bottom: 25px;
+            page-break-inside: avoid;
+        }
+
+        .sidebar-section h3 {
+            color: #e74c3c;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 5px;
+        }
+
+        .transport-item {
+            background: white;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border-left: 3px solid #007bff;
+            font-size: 0.85em;
+        }
+
+        .transport-item i {
+            color: #007bff;
+            margin-right: 8px;
+        }
+
+        .tips-list {
+            list-style: none;
+        }
+
+        .tips-list li {
+            background: white;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border-left: 3px solid #ffc107;
+            font-size: 0.85em;
+        }
+
+        .tips-list li i {
+            color: #ffc107;
+            margin-right: 8px;
+        }
+
+        .food-item {
+            background: white;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border-left: 3px solid #28a745;
+            font-size: 0.85em;
+        }
+
+        .food-item i {
+            color: #28a745;
+            margin-right: 8px;
+        }
+
+        /* 打印按钮 */
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .print-button:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .print-button i {
+            margin-right: 8px;
+        }
+
+        /* 滚动到顶部按钮 */
+        .scroll-top-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2em;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .scroll-top-button:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .scroll-top-button.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+                min-height: auto;
+                margin: 10px;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+            
+            .overview-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-button no-print" onclick="window.print()">
+        <i class="fas fa-print"></i>打印行程表
+    </button>
+    
+    <button class="scroll-top-button no-print" onclick="scrollToTop()" id="scrollTopBtn">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <div class="container">
+        <div class="crop-marks"></div>
+        
+        <!-- 头部区域 -->
+        <div class="header">
+            <h1>成都一日游旅行规划表</h1>
+            <p>天府之国 · 熊猫之乡 · 美食之都</p>
+            <div class="header-info">
+                <div>
+                    <i class="fas fa-calendar"></i> 建议游览时间：8-10小时
+                </div>
+                <div>
+                    <i class="fas fa-map-marker-alt"></i> 总行程距离：约30公里
+                </div>
+                <div class="weather-info">
+                    <i class="fas fa-cloud-sun"></i> 最佳季节：春秋两季
+                </div>
+            </div>
+        </div>
+
+        <!-- 概览区域 -->
+        <div class="overview">
+            <h2><i class="fas fa-chart-pie"></i> 行程概览</h2>
+            <div class="overview-grid">
+                <div class="overview-item">
+                    <i class="fas fa-paw"></i>
+                    <h3>熊猫基地</h3>
+                    <p>7:30-10:30</p>
+                </div>
+                <div class="overview-item">
+                    <i class="fas fa-archway"></i>
+                    <h3>宽窄巷子</h3>
+                    <p>12:00-14:00</p>
+                </div>
+                <div class="overview-item">
+                    <i class="fas fa-shopping-bag"></i>
+                    <h3>春熙路</h3>
+                    <p>14:00-17:00</p>
+                </div>
+                <div class="overview-item">
+                    <i class="fas fa-landmark"></i>
+                    <h3>锦里+武侯祠</h3>
+                    <p>17:00-20:00</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <div class="main-content">
+            <!-- 时间表区域 -->
+            <div class="timeline">
+                <h2><i class="fas fa-clock"></i> 详细时间安排</h2>
+                
+                <div class="timeline-item">
+                    <div class="timeline-time">07:30</div>
+                    <div class="timeline-icon">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>成都大熊猫繁育研究基地</h3>
+                        <div class="timeline-details">
+                            <p><i class="fas fa-map-marker-alt"></i> 熊猫大道1375号</p>
+                            <p><i class="fas fa-clock"></i> 开放时间：7:30-17:00</p>
+                            <p><i class="fas fa-ticket-alt"></i> 门票：<span class="price-tag">58元</span></p>
+                            <p><i class="fas fa-star"></i> 必看：大熊猫育幼区、成年大熊猫别墅</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-time">12:00</div>
+                    <div class="timeline-icon">
+                        <i class="fas fa-archway"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>宽窄巷子景区</h3>
+                        <div class="timeline-details">
+                            <p><i class="fas fa-map-marker-alt"></i> 宽巷子27号</p>
+                            <p><i class="fas fa-clock"></i> 开放时间：24小时营业</p>
+                            <p><i class="fas fa-ticket-alt"></i> 门票：<span class="price-tag">免费</span></p>
+                            <p><i class="fas fa-utensils"></i> 必吃：钟水饺、赖汤圆、三大炮</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-time">14:00</div>
+                    <div class="timeline-icon">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>春熙路</h3>
+                        <div class="timeline-details">
+                            <p><i class="fas fa-map-marker-alt"></i> 春熙路街道</p>
+                            <p><i class="fas fa-clock"></i> 开放时间：全天开放</p>
+                            <p><i class="fas fa-ticket-alt"></i> 门票：<span class="price-tag">免费</span></p>
+                            <p><i class="fas fa-shopping-cart"></i> 必逛：太古里、IFS、王府井百货</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-time">17:00</div>
+                    <div class="timeline-icon">
+                        <i class="fas fa-landmark"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>锦里古街</h3>
+                        <div class="timeline-details">
+                            <p><i class="fas fa-map-marker-alt"></i> 武侯祠大街与武侯祠横街交叉口北180米</p>
+                            <p><i class="fas fa-clock"></i> 开放时间：9:00-22:00</p>
+                            <p><i class="fas fa-ticket-alt"></i> 门票：<span class="price-tag">免费</span></p>
+                            <p><i class="fas fa-utensils"></i> 必吃：叶婆婆钵钵鸡、张飞牛肉</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-time">18:30</div>
+                    <div class="timeline-icon">
+                        <i class="fas fa-temple-buddhist"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>成都武侯祠博物馆</h3>
+                        <div class="timeline-details">
+                            <p><i class="fas fa-map-marker-alt"></i> 武侯祠大街231号</p>
+                            <p><i class="fas fa-clock"></i> 开放时间：8:00-18:00</p>
+                            <p><i class="fas fa-ticket-alt"></i> 门票：<span class="price-tag">50元</span></p>
+                            <p><i class="fas fa-star"></i> 必看：汉昭烈庙、武侯祠、惠陵</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 侧边栏 -->
+            <div class="sidebar">
+                <!-- 交通信息 -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-route"></i> 交通信息</h3>
+                    <div class="transport-item">
+                        <i class="fas fa-car"></i>
+                        <strong>熊猫基地 → 宽窄巷子</strong><br>
+                        驾车约37分钟 (21.8公里)
+                    </div>
+                    <div class="transport-item">
+                        <i class="fas fa-car"></i>
+                        <strong>宽窄巷子 → 春熙路</strong><br>
+                        驾车约21分钟 (4.1公里)
+                    </div>
+                    <div class="transport-item">
+                        <i class="fas fa-car"></i>
+                        <strong>春熙路 → 锦里</strong><br>
+                        驾车约23分钟 (3.9公里)
+                    </div>
+                    <div class="transport-item">
+                        <i class="fas fa-walking"></i>
+                        <strong>锦里 → 武侯祠</strong><br>
+                        步行约6分钟 (495米)
+                    </div>
+                </div>
+
+                <!-- 实用贴士 -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-lightbulb"></i> 实用贴士</h3>
+                    <ul class="tips-list">
+                        <li><i class="fas fa-clock"></i> 熊猫基地早上光线最佳，熊猫最活跃</li>
+                        <li><i class="fas fa-subway"></i> 建议地铁+打车结合，成都地铁网络发达</li>
+                        <li><i class="fas fa-camera"></i> 锦里傍晚华灯初上最美，适合拍照</li>
+                        <li><i class="fas fa-shopping-bag"></i> 春熙路购物，锦里买纪念品</li>
+                        <li><i class="fas fa-utensils"></i> 每个景点都有特色美食，建议品尝当地小吃</li>
+                    </ul>
+                </div>
+
+                <!-- 美食推荐 -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-utensils"></i> 美食推荐</h3>
+                    <div class="food-item">
+                        <i class="fas fa-coffee"></i>
+                        <strong>早餐</strong><br>
+                        熊猫基地附近或宽窄巷子小吃
+                    </div>
+                    <div class="food-item">
+                        <i class="fas fa-hamburger"></i>
+                        <strong>午餐</strong><br>
+                        宽窄巷子传统川菜
+                    </div>
+                    <div class="food-item">
+                        <i class="fas fa-coffee"></i>
+                        <strong>下午茶</strong><br>
+                        春熙路咖啡厅
+                    </div>
+                    <div class="food-item">
+                        <i class="fas fa-drumstick-bite"></i>
+                        <strong>晚餐</strong><br>
+                        锦里古街特色小吃
+                    </div>
+                </div>
+
+                <!-- 紧急联系 -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-phone"></i> 紧急联系</h3>
+                    <div style="font-size: 0.85em; color: #6c757d;">
+                        <p><i class="fas fa-ambulance"></i> 急救：120</p>
+                        <p><i class="fas fa-shield-alt"></i> 报警：110</p>
+                        <p><i class="fas fa-fire-extinguisher"></i> 消防：119</p>
+                        <p><i class="fas fa-info-circle"></i> 旅游咨询：12301</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 打印功能
+        function printPage() {
+            window.print();
+        }
+
+        // 滚动到顶部功能
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 添加页面加载动画
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+
+            // 为时间轴添加动画效果
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            timelineItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                setTimeout(() => {
+                    item.style.transition = 'all 0.5s ease';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateX(0)';
+                }, 200 + index * 100);
+            });
+
+            // 滚动到顶部按钮显示/隐藏
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    scrollTopBtn.classList.add('show');
+                } else {
+                    scrollTopBtn.classList.remove('show');
+                }
+            });
+        });
+
+        // 响应式处理
+        window.addEventListener('resize', function() {
+            if (window.innerWidth <= 768) {
+                document.querySelector('.container').style.width = '100%';
+            } else {
+                document.querySelector('.container').style.width = '210mm';
+            }
+        });
+    </script>
+</body>
+</html>
